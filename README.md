@@ -13,7 +13,23 @@ file, the diff PDF, is copied back into your project.
 `latexdiff`, `latexmk`, and `git` on your `PATH` (all ship with TeX Live /
 MacTeX). Run the script from **inside your LaTeX project's git repo**.
 
-## Install (optional: a global `tdiff` command)
+## Install
+
+### Homebrew (recommended)
+
+```bash
+brew install KunLW/tap/tdiff
+```
+
+This installs the `tdiff` command. You still need a TeX distribution
+(MacTeX or TeX Live) providing `latexdiff`, `latexmk`, and `xelatex`; `tdiff`
+auto-detects common TeX install locations at runtime.
+
+> If you previously ran `./install.sh`, its symlink in `~/.local/bin` sits ahead
+> of Homebrew on `PATH` and shadows the brew binary. Remove it
+> (`rm ~/.local/bin/tdiff`) to use the Homebrew version.
+
+### From source (symlink)
 
 Symlink the script into a directory on your `PATH` so you can call it from any
 project as `tdiff`:
@@ -24,7 +40,6 @@ project as `tdiff`:
 ln -s "$PWD/scripts/latexdiff-pdf.sh" ~/.local/bin/tdiff
 ```
 
-Make sure `~/.local/bin` is on your `PATH` (it is by default on this machine).
 The command name is `tdiff` to avoid colliding with TeX Live's own `texdiff`
 tool. Being a symlink, it always tracks the latest version of the repo. After
 that, `tdiff` and `scripts/latexdiff-pdf.sh` are interchangeable.

@@ -78,6 +78,15 @@ case "$ENGINE" in
 esac
 
 # --- preflight --------------------------------------------------------------
+# Ensure common TeX Live / MacTeX bin dirs are on PATH (brew/GUI shells
+# frequently lack them). Only adds dirs that exist and aren't already present.
+for d in /Library/TeX/texbin /usr/local/texlive/*/bin/* \
+         /opt/homebrew/bin /usr/local/bin; do
+  [ -d "$d" ] || continue
+  case ":$PATH:" in *":$d:"*) ;; *) PATH="$PATH:$d" ;; esac
+done
+export PATH
+
 command -v latexdiff >/dev/null || die "latexdiff not found on PATH"
 command -v latexmk   >/dev/null || die "latexmk not found on PATH"
 command -v git       >/dev/null || die "git not found on PATH"
