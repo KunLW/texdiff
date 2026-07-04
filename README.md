@@ -29,6 +29,8 @@ scripts/latexdiff-pdf.sh [options] <old-git-ref>
 | `-e, --engine ENGINE` | `xelatex` | `xelatex` / `lualatex` / `pdf` (pdflatex) |
 | `-n, --new-ref REF` | *(working tree)* | diff against a committed ref instead of the working tree |
 | `-k, --keep-aux` | off | keep the temp dir (aux/log/tex) and print its path |
+| `--no-figures` | off | don't mark changed figures (`latexdiff --graphics-markup=none`) |
+| `--no-bib` | off | don't mark changed citations (`latexdiff --disable-citation-markup`) |
 | `-h, --help` | — | print usage and exit |
 
 ### Examples
@@ -38,6 +40,7 @@ scripts/latexdiff-pdf.sh HEAD~1                       # since last commit
 scripts/latexdiff-pdf.sh -e pdf -m paper.tex v1       # English doc, custom main
 scripts/latexdiff-pdf.sh --new-ref HEAD v1-submitted  # diff two committed revs
 scripts/latexdiff-pdf.sh --keep-aux HEAD              # keep intermediates to debug
+scripts/latexdiff-pdf.sh --no-figures --no-bib HEAD  # don't highlight figure/citation changes
 ```
 
 CJK / KOMA-Script reports should keep the default `xelatex` engine; use
@@ -58,6 +61,8 @@ Inside a Claude Code session in your project: `/diffpdf HEAD~1`. See
   renamed or deleted since the old ref still resolve during compilation instead
   of failing with "file not found." Note that binary image *content* changes
   cannot be visually diffed — only a figure's inclusion / caption / label text
-  is marked.
+  is marked. Use `--no-figures` to skip figure markup and `--no-bib` to skip
+  citation markup entirely (the figures and references still compile, they're
+  just not highlighted as changed).
 - **Keeping intermediates:** run with `--keep-aux`; the temp dir path (with all
   `.tex` / `.aux` / `.log`) is printed and survives.

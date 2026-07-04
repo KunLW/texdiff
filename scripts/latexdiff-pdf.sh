@@ -18,6 +18,8 @@ Options:
   -e, --engine ENGINE Compile engine: xelatex | lualatex | pdf (default: xelatex)
   -n, --new-ref REF   Diff against a committed ref instead of the working tree
   -k, --keep-aux      Keep the temp dir (aux/log/tex) and print its path
+      --no-figures    Don't mark changed figures (latexdiff --graphics-markup=none)
+      --no-bib        Don't mark changed citations (latexdiff --disable-citation-markup)
   -h, --help          Show this help and exit
 
 Examples:
@@ -37,6 +39,7 @@ ENGINE="xelatex"
 NEWREF=""
 KEEP=""
 OLDREF=""
+LATEXDIFF_OPTS=(--flatten)
 
 # --- flag parsing -----------------------------------------------------------
 POSITIONAL=()
@@ -51,6 +54,8 @@ while [ $# -gt 0 ]; do
     -n|--new-ref)  NEWREF="${2:?--new-ref needs a value}"; shift 2 ;;
     --new-ref=*)   NEWREF="${1#*=}";                      shift ;;
     -k|--keep-aux) KEEP=1;                                shift ;;
+    --no-figures)  LATEXDIFF_OPTS+=(--graphics-markup=none);    shift ;;
+    --no-bib)      LATEXDIFF_OPTS+=(--disable-citation-markup); shift ;;
     -h|--help)     usage; exit 0 ;;
     --)            shift; while [ $# -gt 0 ]; do POSITIONAL+=("$1"); shift; done ;;
     -*)            die "unknown option: $1 (see --help)" ;;
@@ -99,8 +104,9 @@ else
   NEWMAIN="$MAIN"
 fi
 
-# 3. latexdiff, flattening \input/\include on both sides.
-latexdiff --flatten "$TMP/old/$MAIN" "$NEWMAIN" > "$TMP/diff.tex"
+# 3. latexdiff, flattening \input/\include on both sides. --no-figures /
+#    --no-bib append options that suppress figure / citation markup.
+latexdiff "${LATEXDIFF_OPTS[@]}" "$TMP/old/$MAIN" "$NEWMAIN" > "$TMP/diff.tex"
 
 # 4. Compile with latexmk. cwd stays the project root so current figures/.bib/
 #    .sty resolve; the archived old tree is prepended to the search paths so old
