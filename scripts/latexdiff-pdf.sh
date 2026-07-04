@@ -4,9 +4,11 @@
 # only the resulting diff PDF is left in the project.
 set -euo pipefail
 
+PROG="$(basename "$0")"
+
 usage() {
-  cat <<'EOF'
-Usage: latexdiff-pdf.sh [options] <old-git-ref>
+  cat <<EOF
+Usage: $PROG [options] <old-git-ref>
 
 Generate a latexdiff PDF comparing <old-git-ref> against the current working
 tree (default) or another ref. Only the final PDF is kept; all aux/log/tex
@@ -23,14 +25,14 @@ Options:
   -h, --help          Show this help and exit
 
 Examples:
-  latexdiff-pdf.sh HEAD~1
-  latexdiff-pdf.sh -e pdf -m paper.tex v1-submitted
-  latexdiff-pdf.sh --new-ref HEAD v1-submitted
-  latexdiff-pdf.sh --keep-aux HEAD
+  $PROG HEAD~1
+  $PROG -e pdf -m paper.tex v1-submitted
+  $PROG --new-ref HEAD v1-submitted
+  $PROG --keep-aux HEAD
 EOF
 }
 
-die() { echo "latexdiff-pdf: $*" >&2; exit 1; }
+die() { echo "$PROG: $*" >&2; exit 1; }
 
 # --- defaults ---------------------------------------------------------------
 MAIN="main.tex"

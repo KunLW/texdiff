@@ -13,9 +13,26 @@ file, the diff PDF, is copied back into your project.
 `latexdiff`, `latexmk`, and `git` on your `PATH` (all ship with TeX Live /
 MacTeX). Run the script from **inside your LaTeX project's git repo**.
 
+## Install (optional: a global `tdiff` command)
+
+Symlink the script into a directory on your `PATH` so you can call it from any
+project as `tdiff`:
+
+```bash
+./install.sh                 # symlinks tdiff into ~/.local/bin
+# or manually:
+ln -s "$PWD/scripts/latexdiff-pdf.sh" ~/.local/bin/tdiff
+```
+
+Make sure `~/.local/bin` is on your `PATH` (it is by default on this machine).
+The command name is `tdiff` to avoid colliding with TeX Live's own `texdiff`
+tool. Being a symlink, it always tracks the latest version of the repo. After
+that, `tdiff` and `scripts/latexdiff-pdf.sh` are interchangeable.
+
 ## Usage
 
 ```
+tdiff [options] <old-git-ref>          # if installed
 scripts/latexdiff-pdf.sh [options] <old-git-ref>
 ```
 
